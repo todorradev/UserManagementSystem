@@ -1,0 +1,17 @@
+{
+  "name": "usermanagementsystem",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Todor Radev <tradev@santech.fr>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
