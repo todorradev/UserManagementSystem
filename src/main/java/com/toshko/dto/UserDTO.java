@@ -1,7 +1,5 @@
 package com.toshko.dto;
 
-import java.time.LocalDate;
-
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -15,11 +13,14 @@ public class UserDTO {
 	@Size(max = 50)
 	private String lastName;
 
+	@Size(max = 50)
+	private String password;
+
 	@Email
 	@Size(min = 5, max = 100)
 	private String email;
 
-	private LocalDate birthdate;
+	private String birthdate;
 
 	public Long getId() {
 		return id;
@@ -53,11 +54,11 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	public LocalDate getBirthdate() {
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(LocalDate birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 	

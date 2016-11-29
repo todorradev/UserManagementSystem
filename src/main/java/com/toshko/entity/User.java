@@ -31,7 +31,7 @@ public class User {
 	@Column(length = 100, unique = true)
 	private String email;
 
-	@Column(name = "birthdate", length = 50)
+	@Column(name = "birthdate")
 	private LocalDate birthdate;
 
 	public Long getId() {

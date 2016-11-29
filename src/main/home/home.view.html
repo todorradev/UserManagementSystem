@@ -1,0 +1,21 @@
+<h1>Hi, {{vm.user.firstName}}!</h1>
+<p>You're logged in!!</p>
+<h3>All registered users:</h3>
+<table ng-table="users" class="table">
+	<tr ng-repeat="user in vm.allUsers">
+		<td>
+			<input type="text" class="form-control" ng-model="user.firstName"/> </td>
+		<td>
+			<input type="text" class="form-control" ng-model="user.lastName"/> </td>
+		<td>
+			<input type="email" class="form-control" ng-model="user.email" readonly /> </td>
+		<td>
+			<input type="date" class="form-control" ng-model="user.birthdate" required /> </td>
+		<td>
+			<a href="#" ng-click="vm.deleteUser(user.id)">Delete</a> </td>
+		<td>
+			<a href="#" ng-click="vm.updateUser(user)">Update</a> </td>
+	</tr>
+</table>
+<p>&nbsp;</p>
+<p><a href="#/login" class="btn btn-primary">Logout</a></p>

@@ -1,18 +1,19 @@
 package com.toshko.resources;
 
-import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.toshko.entity.User;
+import com.toshko.dto.UserDTO;
 import com.toshko.service.UserService;
 
 @RestController
@@ -21,37 +22,39 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
+	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createUser() throws URISyntaxException {
-		User user = new User();
-		user.setId(3L);
-		user.setFirstName("Todor");
-		user.setLastName("Radev");
-		user.setEmail("todor.radev@gmail.com");
-		LocalDate localDate = LocalDate.now();
-		user.setBirthdate(localDate);
-		userService.createUser(user);
-		return null;
+	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+		if(userService.getUser(userDTO.getEmail()) != null)
+			return null;
+		
+		userService.createUser(userDTO);
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
-	
+
+	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public void getAllUsers() {
-		List<User> users = userService.findAllUsers();
-		System.out.println(users.toString());
+	public ResponseEntity<List<UserDTO>> getAllUsers() {
+		List<UserDTO> users = userService.findAllUsers();
+		return new ResponseEntity<List<UserDTO>>(users, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-	public void getUser(@PathVariable Long id) {
-		User user = userService.getUser(id);
-		System.out.println(user);
+	@CrossOrigin
+	@RequestMapping(value = "/users/{email:.+}", method = RequestMethod.GET)
+	public ResponseEntity<UserDTO> getUser(@PathVariable String email) {
+		return new ResponseEntity<UserDTO>(userService.getUser(email), HttpStatus.OK);
+
 	}
 
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-	public void updateUser() {
-		System.out.println("update user");
+	@CrossOrigin
+	@RequestMapping(value = "/users", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+		userService.updateUser(userDTO);
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable Long id) {
 		userService.deleteUser(id);
