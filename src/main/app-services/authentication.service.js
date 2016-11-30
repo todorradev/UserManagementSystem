@@ -1,40 +1,36 @@
-﻿(function () {
-	'use strict';
+﻿angular
+	.module('app')
+	.factory('AuthenticationService', AuthenticationService);
 
-	angular
-		.module('app')
-		.factory('AuthenticationService', AuthenticationService);
+AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope'];
+function AuthenticationService($http, $cookieStore, $rootScope) {
+	var service = {};
 
-	AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope'];
-	function AuthenticationService($http, $cookieStore, $rootScope) {
-		var service = {};
+	service.login = login;
+	service.setCredentials = setCredentials;
+	service.clearCredentials = clearCredentials;
 
-		service.login = login;
-		service.setCredentials = setCredentials;
-		service.clearCredentials = clearCredentials;
+	return service;
 
-		return service;
-
-		function login(email, callback) {
-			$http.get('http://localhost:8080/UserManagementSystem/api/users/' + email)
-				.success(function (response) {
-					callback(response);
-				})
-		}
-
-		function setCredentials(email) {
-			$rootScope.globals = {
-				currentUser: {
-					email: email
-				}
-			};
-
-			$cookieStore.put('globals', $rootScope.globals);
-		}
-
-		function clearCredentials() {
-			$rootScope.globals = {};
-			$cookieStore.remove('globals');
-		}
+	function login(email, callback) {
+		$http.get('http://localhost:8080/UserManagementSystem/api/users/' + email)
+			.success(function (response) {
+				callback(response);
+			})
 	}
-})();
+
+	function setCredentials(email) {
+		$rootScope.globals = {
+			currentUser: {
+				email: email
+			}
+		};
+
+		$cookieStore.put('globals', $rootScope.globals);
+	}
+
+	function clearCredentials() {
+		$rootScope.globals = {};
+		$cookieStore.remove('globals');
+	}
+}

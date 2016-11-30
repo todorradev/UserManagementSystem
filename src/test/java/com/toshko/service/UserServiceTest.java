@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;

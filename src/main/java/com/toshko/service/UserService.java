@@ -19,7 +19,6 @@ import com.toshko.repository.UserRepository;
 @Component
 @Transactional
 public class UserService {
-
 	@Autowired
 	private UserRepository userRepository;
 

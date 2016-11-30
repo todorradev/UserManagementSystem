@@ -36,15 +36,13 @@ public class UserController {
 	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ResponseEntity<List<UserDTO>> getAllUsers() {
-		List<UserDTO> users = userService.findAllUsers();
-		return new ResponseEntity<List<UserDTO>>(users, HttpStatus.OK);
+		return new ResponseEntity<List<UserDTO>>(userService.findAllUsers(), HttpStatus.OK);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/{email:.+}", method = RequestMethod.GET)
 	public ResponseEntity<UserDTO> getUser(@PathVariable String email) {
 		return new ResponseEntity<UserDTO>(userService.getUser(email), HttpStatus.OK);
-
 	}
 
 	@CrossOrigin

@@ -1,29 +1,25 @@
-﻿(function () {
-	'use strict';
+﻿angular
+	.module('app')
+	.controller('RegisterController', RegisterController);
 
-	angular
-		.module('app')
-		.controller('RegisterController', RegisterController);
+RegisterController.$inject = ['UserService', '$location', 'FlashService'];
+function RegisterController(UserService, $location, FlashService) {
+	var vm = this;
 
-	RegisterController.$inject = ['UserService', '$location', 'FlashService'];
-	function RegisterController(UserService, $location, FlashService) {
-		var vm = this;
+	vm.register = register;
 
-		vm.register = register;
-
-		function register() {
-			vm.dataLoading = true;
-			UserService.create(vm.user)
-				.then(function (response) {
-					if(response != "") {
-						FlashService.Success('Registration successful', true);
-						$location.path('/login');
-					}
-					else if (!response.success) {
-						FlashService.Error("This email is already registered!");
-						vm.dataLoading = false;
-					}
-				});
-		}
+	function register() {
+		vm.dataLoading = true;
+		UserService.create(vm.user)
+			.then(function (data) {
+				if(data.message != null) {
+					FlashService.Error("This email is already registered!");
+					vm.dataLoading = false;
+				}
+				else {
+					FlashService.Success('Registration successful', true);
+					$location.path('/login');
+				}
+			});
 	}
-})();
+}

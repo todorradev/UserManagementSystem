@@ -11,7 +11,7 @@ var runSequence = require('run-sequence');
 gulp.task('sass', function(){
   return gulp.src('./src/**/*.scss')
     .pipe(sass()) // Converts Sass to CSS with gulp-sass
-    .pipe(gulp.dest('./build'))
+    .pipe(gulp.dest('./src/main/css'))
 	.pipe(browserSync.reload({
       stream: true
     }))
