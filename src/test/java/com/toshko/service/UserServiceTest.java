@@ -43,11 +43,13 @@ public class UserServiceTest {
 		if(userDTO == null)
 			fail();
 
-		userDTO.setFirstName("Test");
-		userDTO.setLastName("Testov");
+		userDTO.setFirstName("updatedFirstName");
+		userDTO.setLastName("updatedLastName");
 		userService.updateUser(userDTO);
-		UserDTO test = userService.getUser(initialUser.getEmail());
-		assertEquals(test.getFirstName(), "Test");
+		UserDTO updatedUser = userService.getUser(initialUser.getEmail());
+
+		assertEquals(updatedUser.getFirstName(), "updatedFirstName");
+		assertEquals(updatedUser.getLastName(), "updatedLastName");
 	}
 
 	@Test

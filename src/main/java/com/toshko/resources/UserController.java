@@ -20,7 +20,6 @@ import com.toshko.service.UserService;
 @RestController
 @RequestMapping(value = "/api")
 public class UserController {
-
 	@Autowired
 	private UserService userService;
 
@@ -29,7 +28,7 @@ public class UserController {
 	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		if(userService.getUser(userDTO.getEmail()) != null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
+
 		userService.createUser(userDTO);
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
@@ -52,7 +51,6 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		return new ResponseEntity<UserDTO>(userService.getUser(email), HttpStatus.OK);
-		
 	}
 
 	@CrossOrigin
@@ -64,7 +62,6 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 
 	@CrossOrigin
@@ -72,9 +69,9 @@ public class UserController {
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		try {
 			userService.deleteUser(id);
-			return ResponseEntity.status(HttpStatus.OK).body(null);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(EmptyResultDataAccessException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with this id");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

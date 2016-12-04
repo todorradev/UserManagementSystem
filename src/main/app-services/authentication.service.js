@@ -4,6 +4,8 @@
 
 AuthenticationService.$inject = ['$http', '$cookieStore', '$rootScope'];
 function AuthenticationService($http, $cookieStore, $rootScope) {
+	const configUrl = location.protocol + "//" + location.hostname + ":" + 8080 + '/api/users/'; //this will not work for ipv6!
+
 	var service = {};
 
 	service.login = login;
@@ -13,7 +15,7 @@ function AuthenticationService($http, $cookieStore, $rootScope) {
 	return service;
 
 	function login(email, callback) {
-		$http.get('http://localhost:8080/UserManagementSystem/api/users/' + email)
+		$http.get(configUrl + email)
 			.success(function (data, response) {
 				callback(data, response);
 			})

@@ -37,7 +37,6 @@ public class UserIntegrationTest {
 
 	@Test
 	public void createUser() {
-		
 		populateUser("createUser@gmail.com");
 
 		ResponseEntity<UserDTO> responseEntity = restTemplate.postForEntity(configUrl, userToCreate, UserDTO.class);
@@ -51,7 +50,7 @@ public class UserIntegrationTest {
 		populateUser("getUser@gmail.com");
 
 		restTemplate.postForEntity(configUrl, userToCreate, UserDTO.class);
-		
+
 		ResponseEntity<UserDTO> responseEntity = restTemplate.getForEntity(configUrl + userToCreate.getEmail(), UserDTO.class);
 		UserDTO returnedUser = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

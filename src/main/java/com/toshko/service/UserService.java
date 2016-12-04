@@ -56,7 +56,6 @@ public class UserService {
 			return null;
 		
 		User user = tempUser.get();
-		
 		return UserTransformation.transformUserToUserDTO(user);
 	}
 
