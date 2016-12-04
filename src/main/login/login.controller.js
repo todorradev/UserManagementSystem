@@ -14,15 +14,13 @@ function LoginController($location, AuthenticationService, FlashService) {
 	})();
 
 	function login() {
-		AuthenticationService.login(vm.email, function (data) {
-			if(data != "") {
+		AuthenticationService.login(vm.email, function (data, response) {
+			if(response == 200) {
 				AuthenticationService.setCredentials(vm.email);
 				$location.path('/');
 				return;
 			}
-			var response = {};
-			response.message = "Email doesn't exist";
-			FlashService.Error(response.message);
+			FlashService.Error("Email doesn't exist");
 		});
 	};
 }

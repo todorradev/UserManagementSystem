@@ -14,9 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Modifying
 	@Query("update User"
-			+ " set firstName = ?1,"
-			+ " lastName = ?2,"
-			+ " birthdate = ?3"
-			+ " where id = ?4")
-	void update(String firstName, String lastName, LocalDate birthdate, Long id);
+			+ " set firstName = ?2,"
+			+ " lastName = ?3,"
+			+ " birthdate = ?4"
+			+ " where id = ?1")
+	void update(Long id, String firstName, String lastName, LocalDate birthdate);
 }

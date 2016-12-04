@@ -14,8 +14,11 @@ function AuthenticationService($http, $cookieStore, $rootScope) {
 
 	function login(email, callback) {
 		$http.get('http://localhost:8080/UserManagementSystem/api/users/' + email)
-			.success(function (response) {
-				callback(response);
+			.success(function (data, response) {
+				callback(data, response);
+			})
+			.error(function (data, response) {
+				callback(data, response);
 			})
 	}
 

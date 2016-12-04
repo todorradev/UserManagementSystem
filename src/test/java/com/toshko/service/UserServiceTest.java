@@ -12,43 +12,33 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.toshko.data.Application;
+import com.toshko.Application;
 import com.toshko.dto.UserDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class UserServiceTest {
+
 	@Inject
 	UserService userService;
 
-	private static UserDTO initialUser = new UserDTO();
-	static {
-		populateUser();
-	}
+	private UserDTO initialUser = new UserDTO();
+
 	@Test
 	public void createUserPositive() {
+		populateUser("createUser@gmail.com");
 		userService.createUser(initialUser);
-		UserDTO userDTO = userService.getUser("fakeUser@gmail.com");
+		UserDTO userDTO = userService.getUser("createUser@gmail.com");
 		if(userDTO != null)
 			assertEquals(userDTO.getEmail(), initialUser.getEmail());
 		else
 			fail();
 	}
 
-
-	@Test
-	public void createUserNegative() {
-		try {
-			userService.createUser(initialUser);
-		} catch(Exception e) {
-			System.err.println("User with this email is already registered");
-			UserDTO userDTO = userService.getUser("todor.radev@gmail.com");
-			assertEquals(userDTO, userDTO);
-		}
-	}
-
 	@Test
 	public void updateUserPositive() {
+		populateUser("updateUserPositive@gmail.com");
+		userService.createUser(initialUser);
 		UserDTO userDTO = userService.getUser(initialUser.getEmail());
 		if(userDTO == null)
 			fail();
@@ -62,6 +52,8 @@ public class UserServiceTest {
 
 	@Test
 	public void updateUserNegative() {
+		populateUser("updateUserNegtive@gmail.com");
+		userService.createUser(initialUser);
 		UserDTO currentUser = userService.getUser(initialUser.getEmail());
 		if(currentUser == null)
 			fail();
@@ -73,6 +65,8 @@ public class UserServiceTest {
 	}
 
 	public void deleteUserPositive() {
+		populateUser("deleteUser@gmail.com");
+		userService.createUser(initialUser);
 		UserDTO currentUser = userService.getUser(initialUser.getEmail());
 		userService.deleteUser(currentUser.getId());
 
@@ -80,10 +74,10 @@ public class UserServiceTest {
 		assertNull(deletedUser);
 	}
 
-	private static void populateUser() {
+	private void populateUser(String email) {
 		initialUser.setFirstName("Todor");
 		initialUser.setLastName("Radev");
-		initialUser.setEmail("fakeUser@gmail.com");
 		initialUser.setBirthdate("2016-11-28");
+		initialUser.setEmail(email);
 	}
 }

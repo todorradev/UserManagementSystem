@@ -3,6 +3,7 @@ package com.toshko.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,9 @@ public class UserController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		if(userService.getUser(userDTO.getEmail()) != null)
-			return null;
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		userService.createUser(userDTO);
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
@@ -35,26 +36,45 @@ public class UserController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public ResponseEntity<List<UserDTO>> getAllUsers() {
-		return new ResponseEntity<List<UserDTO>>(userService.findAllUsers(), HttpStatus.OK);
+	public ResponseEntity<?> getAllUsers() {
+		try {
+			return new ResponseEntity<List<UserDTO>>(userService.findAllUsers(), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/{email:.+}", method = RequestMethod.GET)
-	public ResponseEntity<UserDTO> getUser(@PathVariable String email) {
+	public ResponseEntity<?> getUser(@PathVariable String email) {
+		UserDTO userDTO = userService.getUser(email);
+		if(userDTO == null)
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
 		return new ResponseEntity<UserDTO>(userService.getUser(email), HttpStatus.OK);
+		
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
-		userService.updateUser(userDTO);
-		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+		try {
+			userService.updateUser(userDTO);
+			return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public void deleteUser(@PathVariable Long id) {
-		userService.deleteUser(id);
+	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+		try {
+			userService.deleteUser(id);
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		} catch(EmptyResultDataAccessException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with this id");
+		}
 	}
 }

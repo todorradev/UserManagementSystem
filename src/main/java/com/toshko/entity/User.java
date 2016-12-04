@@ -84,7 +84,7 @@ public class User {
 
 		User user = (User) obj;
 
-		if (!email.equals(user.email))
+		if (!id.equals(user.id))
 			return false;
 
 		return true;
@@ -92,12 +92,6 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return email.hashCode();
-	}
-
-	@Override
-	public String toString() {
-		return "User{" + ", firstName='" + firstName + '\'' + ", lastName='" + lastName
-			+ '\'' + ", email='" + email + '\'' + "}";
+		return id != null ? id.hashCode() : 0;
 	}
 }

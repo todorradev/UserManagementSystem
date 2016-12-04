@@ -2,9 +2,10 @@
 	.module('app')
 	.factory('UserService', UserService);
 
-UserService.$inject = ['$http', '$q'];
-function UserService($http, $q) {
+UserService.$inject = ['$http', '$q', '$location'];
+function UserService($http, $q, $location) {
 	var service = {};
+	const configUrl = location.protocol + "//" + location.hostname + ":" + 8080 + '/api/users/'; //this will not work for ipv6!
 
 	service.getAll = getAll;
 	service.getByEmail = getByEmail;
@@ -16,23 +17,23 @@ function UserService($http, $q) {
 	return service;
 
 	function getAll() {
-		return $http.get('http://localhost:8080/UserManagementSystem/api/users').then(handleSuccess, handleError('Error getting all users'));
+		return $http.get(configUrl).then(handleSuccess, handleError('Error getting all users'));
 	}
 
 	function getByEmail(email) {
-		return $http.get('http://localhost:8080/UserManagementSystem/api/users/' + email).then(handleSuccess, handleError('Error getting user by email'));
+		return $http.get(configUrl + email).then(handleSuccess, handleError('Error loading the logged in user.'));
 	}
 
 	function create(user) {
-		return $http.post('http://localhost:8080/UserManagementSystem/api/users', user).then(handleSuccess, handleError('Error creating user'));
+		return $http.post(configUrl, user).then(handleSuccess, handleError('Error creating user'));
 	}
 
 	function update(user) {
-		return $http.put('http://localhost:8080/UserManagementSystem/api/users', user).then(handleSuccess, handleError('Error updating user'));
+		return $http.put(configUrl, user).then(handleSuccess, handleError('Error updating user'));
 	}
 
 	function deleteUser(id) {
-		return  $http.delete('http://localhost:8080/UserManagementSystem/api/users/' + id).then(handleSuccess, handleError('Error deleting user'));
+		return $http.delete(configUrl + id).then(handleSuccess, handleError('Error deleting user'));
 	}
 
 	function handleSuccess(res) {

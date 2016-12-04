@@ -33,11 +33,17 @@ public class UserService {
 		for (User user : users) {
 			userDTO.add(UserTransformation.transformUserToUserDTO(user));
 		}
+
 		return userDTO;
 	}
 
-	public User getUser(Long id) {
-		return userRepository.findOne(id);
+	public UserDTO getUser(Long id) {
+		User user = userRepository.findOne(id);
+		if(user == null)
+			return null;
+
+		UserDTO userDTO = UserTransformation.transformUserToUserDTO(user);
+		return userDTO;
 	}
 
 	public void deleteUser(Long id) {
@@ -56,6 +62,6 @@ public class UserService {
 
 	public void updateUser(UserDTO userDTO) {
 		User user = UserTransformation.trasformUserDtoToUser(userDTO);
-		userRepository.update(user.getFirstName(), user.getLastName(), user.getBirthdate(), user.getId());
+		userRepository.update(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthdate());
 	}
 }
